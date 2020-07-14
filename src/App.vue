@@ -1,32 +1,51 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="app">
+        <router-view></router-view>
     </div>
-    <router-view/>
-  </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+    // import {getUserInfo} from "./api/isLogin-api";
 
-    &.router-link-exact-active {
-      color: #42b983;
+    // import {createKey, getItem} from "./utils/localstore-util";
+
+    export default {
+        name: 'app',
+        components:{
+
+        },
+        created() {
+
+            //根据localStore
+            // //同步localStore中的值
+            // // let isLogin = localStorage.getItem(createKey("isLogin"))||false;
+            // let isLogin =getItem(createKey("isLogin"))
+            // this.$store.commit("changeLogin",{isLogin})
+            // let userInfo = JSON.parse(localStorage.getItem(createKey("userInfo"))||"{}")
+            // this.$store.commit("changeUserInfo",{userInfo})
+
+
+            //请求接口保留跟新状态
+            // getUserInfo().then(res => {
+            //     // eslint-disable-next-line
+            //     // debugger
+            //     if (res.code === 0) {
+            //         //  已经登录了
+            //         this.$store.commit("changeLogin",{isLogin:true})
+            //         this.$store.commit("changeUserInfo",{userInfo:res.userInfo})
+            //     }else {
+            //     //    没有登录
+            //     }
+            // })
+
+            //把上面的接口封装到Vuex中的actions里
+            this.$store.dispatch("checkLoginStatus")
+        }
+
     }
-  }
-}
+</script>
+<style lang="less" scoped>
+
 </style>
