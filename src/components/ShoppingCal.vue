@@ -1,12 +1,12 @@
 <template>
-    <div  class="shoppingCart">
-        <h3>我的购物车  <span>  共2门课程</span></h3>
-        <div  class="shoppingCartNav">
+    <div class="shoppingCart">
+        <h3>我的购物车 <span>  共2门课程</span></h3>
+        <div class="shoppingCartNav">
             <ul>
-                <li  class="FutureGenerations">
+                <li class="FutureGenerations">
                     <!--                                        <input  type="checkbox">-->
                     <!--                                        <span>全选</span>-->
-                    <el-checkbox  :indeterminate="isIndeterminate"  :value="checkAll"  @change="handleCheckAllChange">
+                    <el-checkbox :indeterminate="isIndeterminate" :value="checkAll" @change="handleCheckAllChange">
                         全选
                     </el-checkbox>
                 </li>
@@ -16,39 +16,39 @@
                 <li>操作</li>
             </ul>
         </div>
-        <div  class="goods"  v-for="(item,index)  in  list"  :key="index">
+        <div class="goods" v-for="(item,index)  in  list" :key="index">
             <ul>
-                <li  class="choose">
+                <li class="choose">
                     <!--  <span></span>-->
-                    <el-checkbox  v-model="item.checked"></el-checkbox>
-                    <img  :src="item.course.coverFileUrl">
+                    <el-checkbox v-model="item.checked"></el-checkbox>
+                    <img :src="item.course.coverFileUrl">
                 </li>
                 <li>{{item.course.courseTitle}}</li>
                 <li>
                     <del>￥{{item.course.coursePrice}}</del>
-                    <span  class="discount">￥{{item.course.discountPrice}}</span>
+                    <span class="discount">￥{{item.course.discountPrice}}</span>
                 </li>
                 <li>
                     <el-tag>{{item.course.discountDesc}}</el-tag>
                 </li>
                 <li>
 
-                    <i  class="el-icon-delete"  @click="delShop(item.shoppingCartId)"></i>
+                    <i class="el-icon-delete" @click="delShop(item.shoppingCartId)"></i>
                 </li>
             </ul>
         </div>
-        <div  class="settlement">
+        <div class="settlement">
 
-            <div  class="chooseAll">
-                <el-checkbox  :indeterminate="isIndeterminate"  :value="checkAll"  @change="handleCheckAllChange">
+            <div class="chooseAll">
+                <el-checkbox :indeterminate="isIndeterminate" :value="checkAll" @change="handleCheckAllChange">
                     全选
                 </el-checkbox>
             </div>
-            <div  class="combined">
-                <div  class="price">
-                    合计<span>￥{{a1}}</span>
+            <div class="combined">
+                <div class="price">
+                    合计<span>￥{{sumNumber}}</span>
                 </div>
-                <div  :class="a1>0?'active':'submit'">提交</div>
+                <div :class="sumNumber>0?'active':'submit'">提交</div>
             </div>
         </div>
     </div>
@@ -59,40 +59,42 @@
 
     import {delShop, goodsList} from "../api/shoppingCart-api";
 
-    export  default  {
-        name:  "ShoppingCal",
-        created()  {
-            goodsList().then(res  =>  {
-                this.list  =  res.shoppingCartList
+    export default {
+        name: "ShoppingCal",
+        created() {
+            goodsList().then(res => {
+                console.log(res)
+                this.list = res.shoppingCartList
+                this.$store.commit("changeShopList",{shopList:res.shoppingCartList})
             })
         },
-        data()  {
-            return  {
-                list:  [],
+        data() {
+            return {
+                list: [],
             }
         },
-        computed:  {
-            isIndeterminate()  {
-                let  i  =  0;
-                this.list.forEach(item  =>  {
-                    if  (item.checked)  {
+        computed: {
+            isIndeterminate() {
+                let i = 0;
+                this.list.forEach(item => {
+                    if (item.checked) {
                         i++
                     }
                 })
-                return  i  !==  0  &&  i  !==  this.list.length
+                return i !== 0 && i !== this.list.length
             },
 
-            a1()  {
-                let  a1  =  0;
-                this.list.forEach(item  =>  {
-                    if  (item.checked)
-                        a1  +=  item.course.coursePrice
+            sumNumber() {
+                let sumNumber = 0;
+                this.list.forEach(item => {
+                    if (item.checked)
+                        sumNumber += item.course.coursePrice
                 })
-                return  a1;
+                return sumNumber;
             },
-            checkAll()  {
-                let  i  =  0;
-                this.list.forEach(item  =>  {
+            checkAll() {
+                let i = 0;
+                this.list.forEach(item => {
                     if (item.checked) {
                         i++
                     }
@@ -101,13 +103,14 @@
             },
         },
         methods: {
-            delShop: function (shoppingCartId) {
+            delShop(shoppingCartId) {
                 // 删除商品的接口
                 delShop(shoppingCartId).then(res => {
                     if (res) {
                         // 刷新购物车列表
                         goodsList().then(res => {
                             this.list = res.shoppingCartList
+                            this.$store.commit("changeShopList",{shopList:res.shoppingCartList})
                         })
                     }
 
@@ -117,7 +120,10 @@
 
                 if (val) {
                     // 全选操作
-                    this.list = this.list.map(item => ({...item, checked: true}))
+                    this.list = this.list.map(item => (
+                            {...item, checked: true}
+                        )
+                    )
                 } else {
                     // 取消全选的操作
                     this.list = this.list.map(item => ({...item, checked: false}))
@@ -156,12 +162,16 @@
                 overflow: hidden;
                 list-style: none;
                 padding: 0;
+
                 .FutureGenerations {
                     vertical-align: middle;
                     padding-left: 10px;
                     cursor: pointer;
                     width: 20%;
+                    box-sizing: border-box;
+
                     span {
+                        box-sizing: border-box;
                         padding: 0 8px;
                         vertical-align: middle;
                     }
@@ -190,9 +200,11 @@
                 overflow: hidden;
                 list-style: none;
                 padding: 0;
+
                 .choose {
                     padding-left: 10px;
                     width: 20%;
+
                     img {
                         width: 156px;
                         height: 100%;
@@ -217,6 +229,7 @@
                     width: 20%;
                     vertical-align: middle;
                     line-height: 90px;
+                    box-sizing: border-box;
 
                     del {
                         color: rgb(153, 153, 153);

@@ -46,6 +46,9 @@ const routes = [
             {
                 path: "/shopping-cart",
                 component: ShoppingCal,
+                meta:{
+                    isAuth:true
+                }
             },
         ],
     }

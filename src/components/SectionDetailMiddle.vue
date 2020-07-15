@@ -35,11 +35,20 @@
                         </svg>
                     </li>
                 </ul>
-                <p>免费</p>
-<!--                                     <router-link :to="'/play'" tag="div"><button>立即观看</button></router-link>-->
-                <button @click="play" class="playBtn">立即观看</button>
-<!--                <el-button type="info">立即购买</el-button>-->
-<!--                <button>加入购物车</button>-->
+                <!--中间是否免费-->
+                <div class="boxmid1">
+                    <p v-if="obj.isFree==1">免费</p>
+
+                    <p class="charge" v-if="obj.isFree!=1">
+                        ￥99.9
+                        <del> ￥&nbsp;800</del>
+                    </p>
+                    <div class="xsjh pull-right" v-if="obj.isFree!=1">限时钜惠</div>
+                </div>
+                <!--底部的按钮-->
+                <button @click="play" class="playBtn" v-if="obj.isFree==1">立即观看</button>
+                <button type="info" v-if="obj.isFree!=1" style="background: rgb(255, 128, 0); border: rgb(255, 128, 0);">立即购买</button>
+                <button v-if="obj.isFree!=1" style="margin-left: 30px" @click="shop">加入购物车</button>
             </div>
             <div class="collect" @click="collect">
                     <span v-if="!flag">
@@ -62,25 +71,26 @@
 <script>
     import {getCourseDetail} from "../api/apitlcourse";
     import loginMixin from "../mixin/loginMixin";
+    import {joinGoods} from "../api/shoppingCart-api";
 
     export default {
         name: "SectionDetailMiddle",
-        data(){
-            return{
+        data() {
+            return {
                 flag: false,
-                obj:{},
+                obj: {},
             }
         },
         mixins: [loginMixin],
         created() {
             //缓冲页
             getCourseDetail(this.$route.params.courseId).then(res => {
-                console.log(res)
+                // console.log(res)
                 this.obj = res.data
                 this.sections = res.data.sections
             });
         },
-        methods:{
+        methods: {
             //点击收藏进行收藏
             collect() {
                 if (this.loginClick()) {
@@ -93,6 +103,12 @@
                 if (this.loginClick()) {
                     this.$router.push('/play/' + this.obj.courseId)
                 }
+            },
+            shop(){
+                this.$router.push('/shopping-cart')
+                joinGoods(this.obj.courseId).then(res=>{
+                    console.log(res)
+                })
             },
         }
     }
@@ -131,18 +147,22 @@
     ul {
         list-style: none;
     }
-    .section-detail-middle{
+
+    .section-detail-middle {
         width: 1200px;
         margin: 0 auto;
         /*中间底部目录/评论等主体的盒子*/
+
         .midBox1 {
             width: 100%;
             background: #fff;
             border-radius: 4px;
             padding: 20px;
-            .playBtn:hover{
-                cursor:pointer;
+
+            .playBtn:hover {
+                cursor: pointer;
             }
+
             .midimg {
                 padding: 0;
                 width: 33.33333333%;
@@ -160,7 +180,28 @@
             .midText {
                 width: 50%;
                 float: left;
-
+                .boxmid1{
+                    .charge {
+                        font-size: 32px;
+                        color: #f00;
+                        margin-bottom: 0;
+                        margin-top: 3px;
+                        display: inline-block;
+                        del{
+                            font-size: 18px;
+                            color: #999999;
+                        }
+                    }
+                    .xsjh {
+                        color: #fa8c16;
+                        background-color: #fff7e6;
+                        height: 22px;
+                        border: 1px solid #ffd591;
+                        padding: 0 7px;
+                        font-size: 12px;
+                        line-height: 22px;
+                    }
+                }
                 h3 {
                     font-weight: 400;
                 }
@@ -179,6 +220,9 @@
                     background-color: #00cf8c;
                     border: 0;
                     outline: none;
+                }
+                button:hover{
+                    cursor: pointer;
                 }
 
                 .grade {

@@ -1,9 +1,9 @@
 import request from '../utils/http'
 // 加入购物车
 
-export function joinGoods(status) {
+export function joinGoods(courseId) {
 
-    return request.get(`/api/weChat/applet/shoppingCart/join/shoppingCart/${status}`)
+    return request.get(`/api/weChat/applet/shoppingCart/join/shoppingCart/${courseId}`)
 }
 
 

@@ -20,7 +20,8 @@
                 <div class="logIn">
 
                       <span class="shopping">
-                         <i class="el-icon-shopping-cart-2"></i>
+                         <i class="el-icon-shopping-cart-2 icon_shopcar" @click="shop"></i>
+                          <span class="shopcar">{{calculationShopList}}</span>
                       </span>
                     <span class="loginbtn" @click="showLoginModel" v-if="!isLogin">登录/注册</span>
                     <span class="loginbtn" @click="showLoginModel" v-else>{{userInfo.nickname}}</span>
@@ -40,7 +41,7 @@
 
 <script>
     import Login from "./Login";
-    import {mapState} from "vuex";
+    import {mapGetters, mapState} from "vuex";
     import {logout} from "../api/isLogin-api";
 
     export default {
@@ -49,13 +50,17 @@
             Login
         },
         computed: {
-            ...mapState(["isLogin", "userInfo"])
+            ...mapState(["isLogin", "userInfo"]),
+            ...mapGetters(["calculationShopList"])
         },
         methods: {
             showLoginModel() {
                 // eslint-disable-next-line
                 // debugger
                 this.$store.commit("changeLoginModelVisible", {isShow: true})
+            },
+            shop(){
+                this.$router.push("/shopping-cart")
             },
             logout() {
                 logout().then(res => {
@@ -186,6 +191,15 @@
                 .shopping{
                     font-size: 18px;
                     vertical-align: middle;
+                    position: relative;
+                    .icon_shopcar{
+                        font-size: 32px;
+                    }
+                    .shopcar{
+                        position: absolute;
+                        color: red;
+                        left: 12px;
+                    }
                 }
                 .shopping::after {
                     content: '';

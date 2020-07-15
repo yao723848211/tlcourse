@@ -42,6 +42,7 @@
 
             //把上面的接口封装到Vuex中的actions里
             this.$store.dispatch("checkLoginStatus")
+            this.$store.dispatch("modifyShopList")
         }
 
     }

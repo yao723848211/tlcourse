@@ -22,10 +22,11 @@
                                         class="person">{{item.learningNum}}</span>人报名</p>
                                 <p class="free" v-if="item.isFree==1">免费</p>
                                 <p class="charge" v-if="item.isFree!=1">
-                                    ￥99.9
-                                    <del> ￥&nbsp;800</del>
+                                    ￥{{item.discountPrice}}
+                                    <del> ￥&nbsp;{{item.coursePrice}}</del>
                                 </p>
-                                <div class="xsjh pull-right" v-if="item.isFree!=1">{{item.discountDesc}}</div>
+<!--                                <div class="xsjh pull-right" v-if="item.isFree!=1">{{item.discountDesc}}</div>-->
+                                <div class="xsjh pull-right" v-if="item.isFree!=1">限时钜惠</div>
                             </a>
                         </router-link>
                     </li>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {getUserInfo} from "../api/isLogin-api";
+import {goodsList} from "../api/shoppingCart-api";
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
@@ -8,6 +9,7 @@ const store = new Vuex.Store({
         loginModelVisible: false,
         isLogin: false,
         userInfo: {},
+        shopList:[],
     },
     mutations: {
         changeLoginModelVisible(state, {isShow}) {
@@ -18,9 +20,16 @@ const store = new Vuex.Store({
         },
         changeUserInfo(state, {userInfo}) {
             state.userInfo = userInfo
+        },
+        changeShopList(state,payload){
+            state.shopList=payload.shopList
         }
     },
-    getters: {},
+    getters: {
+        calculationShopList:state => {
+            return state.shopList.length
+        }
+    },
     actions: {
         checkLoginStatus(context,) {
             return getUserInfo().then(res => {
@@ -35,6 +44,11 @@ const store = new Vuex.Store({
                     context.commit("changeLogin", {isLogin: false})
                     context.commit("changeUserInfo", {userInfo: {}})
                 }
+            })
+        },
+        modifyShopList(context){
+            return goodsList().then(res => {
+                context.commit("changeShopList",{shopList:res.shoppingCartList})
             })
         }
     },

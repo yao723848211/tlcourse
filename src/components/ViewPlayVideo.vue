@@ -14,9 +14,12 @@
                         <h3>{{item.sectionName}}</h3>
                         <dt>
                             <dl class="dlBox" v-for="(item,index) in item.subSections" :key="index">
-                                <div class="pull-left leftBox">
-                                    <div class="recorded clearfix">录播</div>
-                                    <div class="pageword" ref="active" @click="playView(item.sectionId)">{{i+1}}-{{index+1}} {{item.sectionName}}</div>
+                                <div class="pull-left leftBox"  @click="playView(item.sectionId)">
+                                    <div class="recorded clearfix" :class="playId==item.sectionId?'active1':''">录播</div>
+                                    <div class="pageword"
+                                         :class="playId==item.sectionId?'active':''">{{i+1}}-{{index+1}}
+                                        {{item.sectionName}}
+                                    </div>
                                     <!--<div>32分钟</div>-->
                                 </div>
                             </dl>
@@ -42,20 +45,22 @@
             return {
                 obj: {},
                 sections: [],
-                file:{},
+                file: {},
+                playId: 1,
             }
         },
         components: {
             PageVideo,
             SectionDetail,
         },
-        methods:{
+        methods: {
             playView(sectionId) {
-                switchChapters(sectionId).then(res=>{
-                    console.log(res.section.file);
-                    this.file=res.section.file
+                switchChapters(sectionId).then(res => {
+                    // console.log(res.section.file);
+                    this.file = res.section.file
                 });
-                this.$refs.active.style="{color:red}"
+                // console.log(sectionId)
+                this.playId = sectionId;
             }
         },
         created() {
@@ -90,6 +95,12 @@
         display: block;
         clear: both;
     }
+    .active{
+        color: #23db9b;
+    }
+    .active1{
+        background-color: #23db9b!important;
+    }
 
     .view-play-video-container {
         width: 1200px;
@@ -111,8 +122,10 @@
                 width: 300px;
                 height: 450px;
                 overflow: scroll;
+
                 .section-detail-directory {
                     margin-left: 20px;
+
                     .dlBox {
                         margin-top: 5px;
 
@@ -131,14 +144,21 @@
                                 justify-content: center;
                                 color: white;
                             }
-
-                            .active {
-                                background-color: #1da57a;
-                                color: #1da57a;
-                            }
+                            /*.active {*/
+                            /*    background-color: #1da57a;*/
+                            /*    color: #1da57a;*/
+                            /*}*/
                         }
-                    }
 
+
+                        .leftBox:hover .recorded{
+                            background-color: #1da57a;
+                        }
+                        .leftBox:hover .pageword{
+                            color: #1da57a;
+                        }
+
+                    }
                     .dlBox:hover {
                         color: #1da57a;
                         cursor: pointer;

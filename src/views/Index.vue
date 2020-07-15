@@ -18,7 +18,7 @@
         <div class="qq text-center">
             <ul>
                 <li>
-                    <a href="#" class="a1">
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin=577405209&site=qq&me" target="_blank" class="a1">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-QQ"></use>
                         </svg>

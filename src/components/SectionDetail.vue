@@ -21,7 +21,7 @@
                             </h3>
                             <dt>
                                 <dl class="dlBox" v-for="(item,index) in item.subSections" :key="index"
-                                    @mouseover="shiftIn(index)" @mouseout="shiftOut">
+                                    @mouseover="shiftIn(index)" @mouseout="shiftOut"  @click="playView(item.sectionId)">
                                     <div class="pull-left leftBox">
                                         {{i+1}}-{{index+1}}
                                         <span class="empty"></span>
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-    import {getCourseComment, getCourseDetail} from "../api/apitlcourse";
+    import {getCourseComment, getCourseDetail, switchChapters} from "../api/apitlcourse";
     import loginMixin from "../mixin/loginMixin";
 
 
@@ -116,6 +116,13 @@
             shiftOut() {
                 this.index1 = -1
             },
+            playView(sectionId) {
+                switchChapters(sectionId).then(res => {
+                    // console.log(res.section.file);
+                    this.file = res.section.file
+                });
+                console.log(sectionId)
+            }
         },
         created() {
             // console.log(this.$route.params.courseId)

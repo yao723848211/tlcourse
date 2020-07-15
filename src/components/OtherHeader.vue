@@ -10,7 +10,7 @@
                 </div>
                 <div class="nav">
                     <ul class="clearfix">
-                        <li class="pull-left"><a href="./index.html">首页</a></li>
+                        <li class="pull-left"><a href="./index.html" @click.prevent="jumpIndex">首页</a></li>
                         <li class="pull-left two"><a href="#">课程分类
                             <i class="el-icon-arrow-down"></i>
                         </a>
@@ -30,7 +30,8 @@
                 <div class="logIn">
 
                       <span class="shopping">
-                         <i class="el-icon-shopping-cart-2" @click="shop"></i>
+                         <i class="el-icon-shopping-cart-2 icon_shopcar" @click="shop"></i>
+                          <span class="shopcar">{{calculationShopList}}</span>
                       </span>
                     <span class="loginbtn" @click="showLoginModel" v-if="!isLogin">登录/注册</span>
                     <span class="loginbtn" @click="showLoginModel" v-else>{{userInfo.nickname}}</span>
@@ -50,7 +51,7 @@
 
 <script>
     import Login from "./Login";
-    import {mapState} from "vuex";
+    import {mapGetters, mapState} from "vuex";
     import {logout} from "../api/isLogin-api";
 
     export default {
@@ -59,7 +60,8 @@
             Login
         },
         computed: {
-            ...mapState(["isLogin", "userInfo"])
+            ...mapState(["isLogin", "userInfo"]),
+            ...mapGetters(["calculationShopList"])
         },
         methods: {
             showLoginModel() {
@@ -75,6 +77,9 @@
                         this.$store.dispatch("checkLoginStatus")
                     }
                 })
+            },
+            jumpIndex(){
+              this.$router.push("/index")
             },
             shop(){
                 this.$router.push("/shopping-cart")
@@ -227,8 +232,16 @@
                 .shopping {
                     font-size: 18px;
                     vertical-align: middle;
+                    position: relative;
+                    .icon_shopcar{
+                        font-size: 32px;
+                    }
+                    .shopcar{
+                        position: absolute;
+                        color: red;
+                        left: 12px;
+                    }
                 }
-
                 .shopping::after {
                     content: '';
                     display: inline-block;

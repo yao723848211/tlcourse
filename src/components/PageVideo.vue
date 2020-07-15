@@ -4,7 +4,7 @@
             <div>
                 <!--        首页/视频详情-->
                 <div class="index_video">
-                    <a href="">
+                    <a href="" @click.prevent="jumpIndex">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-shouye"></use>
                         </svg>
@@ -20,6 +20,11 @@
 <script>
     export default {
         name: "PageVideo",
+        methods:{
+            jumpIndex(){
+                this.$router.push("/index")
+            }
+        }
     }
 </script>
 
